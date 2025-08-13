@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+/* scss */
+@use 'loading';
+@use 'header';
+@use 'footer';
+@use 'home';
+@use 'portfolio';
+@use 'contact';
+@use 'blog';
+@use 'post-detail';
+
+
+/* color */
+:root {
+  --light-orange: #e7dfd8;
+  --olive: #727938;
+  --dark-grey: #231f20;
+  --black: #000;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}

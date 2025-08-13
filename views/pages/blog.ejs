@@ -1,0 +1,26 @@
+<section class="blog-container">
+    <div class="container-inner">
+        <h2 class="section-title">My Blog</h2>
+        <p class="section-subtitle">I document my learning journey and technical notes.</p>
+
+        <div class="posts-list">
+            <% if (posts && posts.length > 0) { %>
+                <% posts.forEach(post => { %>
+                    <article class="post-item">
+                        <div class="post-item__header">
+                            <p class="post-item__date"><%= post.date %></p>
+                        </div>
+                        <div class="post-item__body">
+                            <h3 class="post-item__title">
+                                <a href="/blog/<%= post.slug %>"><%= post.title %></a>
+                            </h3>
+                            <p class="post-item__summary"><%= post.summary %></p>
+                        </div>
+                    </article>
+                <% }) %>
+            <% } else { %>
+                <p>No posts yet.</p>
+            <% } %>
+        </div>
+    </div>
+</section>
