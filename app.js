@@ -1,13 +1,26 @@
 const dotenv = require("dotenv");
 dotenv.config();
 
-const blogPosts = require('./data/blogPosts.json');
-const portfolioItems = require('./data/portfolioItems.json');
+let blogPosts, portfolioItems;
+
+try {
+    blogPosts = require('./data/blogPosts.json');
+    portfolioItems = require('./data/portfolioItems.json');
+} catch (error) {
+    console.error('Error loading data files:', error);
+    blogPosts = [];
+    portfolioItems = [];
+}
 
 const express = require("express");
 const path = require("path");
 const nodemailer = require("nodemailer"); 
 const expressLayouts = require("express-ejs-layouts");
+
+if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.error('Missing required environment variables: EMAIL_USER and EMAIL_PASS');
+    process.exit(1);
+}
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -94,12 +107,32 @@ app.get('/portfolio', (req, res) => {
 -------------------------- */
 app.post("/contact", (req, res) => {
     const { name, email, message } = req.body;
+    
     if (!name || !email || !message) {
         return res.render("pages/contact", {
             title: "Contact",
             active: "contact",
             successMessage: null,
             errorMessage: "Please fill in all fields."
+        });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return res.render("pages/contact", {
+            title: "Contact",
+            active: "contact",
+            successMessage: null,
+            errorMessage: "Please enter a valid email address."
+        });
+    }
+
+    if (name.length > 100 || message.length > 1000) {
+        return res.render("pages/contact", {
+            title: "Contact",
+            active: "contact",
+            successMessage: null,
+            errorMessage: "Message too long. Please keep it under 1000 characters."
         });
     }
 
